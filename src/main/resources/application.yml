@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: ms-management
+
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER:localhost:9091},${KAFKA_SERVER:localhost:9093},${KAFKA_SERVER:localhost:9094}
+    producer:
+      client-id: ms-management
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: Management.msmanagement.utils.CustomKafkaSerializer
+      bootstrap-servers: ${KAFKA_SERVER:localhost:9091},${KAFKA_SERVER:localhost:9093},${KAFKA_SERVER:localhost:9094}
+
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:mysql://localhost:3306/management}
+    username: ${DATASOURCE_USERNAME:root}
+    password: ${DATASOURCE_PASSWORD:root}
+
+  flyway:
+    url: jdbc:mysql://localhost:3306/management
+    schemas: management
+    user: root
+    password: root
+    baselineOnMigrate: true
+
+#flyway:
+#  url: jdbc:mysql://localhost:3306/management
+#  schemas: management
+#  user: root
+#  password: root
+#  baselineOnMigrate: true
+
+server:
+  port: 0
+
+eureka:
+  instance:
+    hostname: localhost
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_SERVICE_URL:localhost:8761}/eureka/
+
+
