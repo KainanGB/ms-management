@@ -14,8 +14,7 @@ spring:
     producer:
       client-id: ms-management
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: Management.msmanagement.utils.CustomKafkaSerializer
-      bootstrap-servers: ${KAFKA_SERVER:localhost:9091},${KAFKA_SERVER:localhost:9093},${KAFKA_SERVER:localhost:9094}
+      value-serializer: ms.management.utils.CustomKafkaSerializer
 
   datasource:
     url: ${DATASOURCE_URL:jdbc:mysql://localhost:3306/management}

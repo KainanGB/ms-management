@@ -14,7 +14,7 @@ import java.util.Map;
 
 @Slf4j
 @Configuration
-public class CustomKafkaSerializer implements Serializer<Message<NewCourseDTO>> {
+public class CustomKafkaSerializer implements Serializer<Message<?>> {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -24,7 +24,7 @@ public class CustomKafkaSerializer implements Serializer<Message<NewCourseDTO>> 
     }
 
     @Override
-    public byte[] serialize(String s, Message<NewCourseDTO> data) {
+    public byte[] serialize(String s, Message<?> data) {
         try {
             if (data == null){
                 log.warn("Null received at serializing");
@@ -38,7 +38,7 @@ public class CustomKafkaSerializer implements Serializer<Message<NewCourseDTO>> 
     }
 
     @Override
-    public byte[] serialize(String topic, Headers headers, Message<NewCourseDTO> data) {
+    public byte[] serialize(String topic, Headers headers, Message<?> data) {
         return Serializer.super.serialize(topic, headers, data);
     }
 
