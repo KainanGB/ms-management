@@ -2,6 +2,7 @@ spring:
   application:
     name: ms-management
 
+
   jpa:
     hibernate.ddl-auto: update
     show-sql: true
@@ -10,40 +11,37 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
 
   kafka:
-    bootstrap-servers: ${KAFKA_SERVER:localhost:9091},${KAFKA_SERVER:localhost:9093},${KAFKA_SERVER:localhost:9094}
+#    bootstrap-servers: http://kafka-1:9092,http://kafka-2:9092,http://kafka-3:9092
+    bootstrap-servers: localhost:9091,localhost:9093,localhost:9094
     producer:
       client-id: ms-management
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: ms.management.utils.CustomKafkaSerializer
 
   datasource:
-    url: ${DATASOURCE_URL:jdbc:mysql://localhost:3306/management}
-    username: ${DATASOURCE_USERNAME:root}
+    url: ${DATASOURCE_URL:jdbc:mysql://172.28.16.1:3307/management}
+    username: ${DATASOURCE_USERNAME:user}
     password: ${DATASOURCE_PASSWORD:root}
 
   flyway:
-    url: jdbc:mysql://localhost:3306/management
+    url: jdbc:mysql://172.28.16.1:3307/management
     schemas: management
-    user: root
+    user: user
     password: root
     baselineOnMigrate: true
 
-#flyway:
-#  url: jdbc:mysql://localhost:3306/management
-#  schemas: management
-#  user: root
-#  password: root
-#  baselineOnMigrate: true
+
+
 
 server:
   port: 0
 
 eureka:
   instance:
-    hostname: localhost
+    preferIpAddress: true
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     serviceUrl:
-      defaultZone: http://${EUREKA_SERVICE_URL:localhost:8761}/eureka/
+      defaultZone: http://${EUREKA_SERVICE_URL:discovery:8761}/eureka/
 
 

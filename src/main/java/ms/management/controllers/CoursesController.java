@@ -1,5 +1,6 @@
 package ms.management.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import ms.management.dtos.v1.request.CourseRequestDTO;
 import ms.management.dtos.v1.response.CourseResponseDTO;
 import ms.management.services.CoursesService;
@@ -22,9 +23,14 @@ public class CoursesController {
     private final CoursesService coursesService;
 
     @PostMapping
-    public ResponseEntity<CourseResponseDTO> create(@RequestBody @Valid CourseRequestDTO data) {
+    public ResponseEntity<CourseResponseDTO> create(HttpServletRequest request, @RequestBody @Valid CourseRequestDTO data) {
         log.info("C=CoursesController::M=create::I={}", data);
-        final var response = coursesService.create(data);
+        String authorizationHeader = request.getHeader("Authorization");
+
+        log.info("AUTHORIZATION TOKEN::{}", authorizationHeader);
+
+        final var response = coursesService.create(authorizationHeader, data);
+
         log.info("C=CoursesController::M=create::O={}", response);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

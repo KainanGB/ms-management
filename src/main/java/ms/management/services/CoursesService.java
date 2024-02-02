@@ -1,7 +1,10 @@
 package ms.management.services;
 
 
+import jakarta.servlet.http.HttpServletRequest;
+import ms.management.client.AuthenticationClient;
 import ms.management.dtos.v1.request.CourseRequestDTO;
+import ms.management.dtos.v1.request.UserDTO;
 import ms.management.dtos.v1.response.CourseResponseDTO;
 import ms.management.entities.CoursesEntity;
 import ms.management.repositories.CoursesRepository;
@@ -9,6 +12,7 @@ import java.util.Collections;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,9 +24,14 @@ public class CoursesService {
 
     private final CoursesRepository repository;
     private final KafkaMessager kafkaMessager;
+    private final AuthenticationClient authenticationClient;
 
-    public CourseResponseDTO create(CourseRequestDTO data) {
+    public CourseResponseDTO create(String authorizationHeader,CourseRequestDTO data) {
         log.info("C=CoursesService::M=create::I={}", data);
+
+        ResponseEntity<UserDTO> authUser = authenticationClient.getUser(authorizationHeader, data.instructor_id());
+
+        log.info("C=CoursesService::M=authenticationClient::O={}", authUser);
 
         final var course = CoursesEntity.builder()
             .title(data.title())
